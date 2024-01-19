@@ -3,9 +3,14 @@ package main
 import (
 	"time"
 
+	"github.com/AdamWarfa/go-gin/initializers"
 	"github.com/AdamWarfa/go-gin/internal/controllers"
 	"github.com/gin-gonic/gin"
 )
+
+func init() {
+	initializers.LoadEnv()
+}
 
 func main() {
 

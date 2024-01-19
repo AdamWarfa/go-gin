@@ -3,60 +3,37 @@ package controllers
 import (
 	"fmt"
 	"net/http"
+	"sync"
+	"time"
 
+	"github.com/AdamWarfa/go-gin/internal/services"
 	"github.com/gin-gonic/gin"
 )
 
+var (
+	randomWord     string = services.GetWord("https://random-word-api.herokuapp.com/word?number=1")
+	randomWordLock sync.Mutex
+)
 
-func GetSlash(c *gin.Context) {
+func GetWord(c *gin.Context) {
+	randomWordLock.Lock()
+	defer randomWordLock.Unlock()
 
-var fooObj myType
+	fmt.Println(randomWord)
 
-name := "Adam"
-
-fooObj = myType{
-	Foo: "bar",
-	Age: 69,
-	Name: &name,
+	c.Header("Content-Type", "application/json")
+	c.String(http.StatusOK, `["`+randomWord+`"]`)
 }
 
-if fooObj.Name != nil {
+func SetWord() {
+	randomWordLock.Lock()
+	defer randomWordLock.Unlock()
 
-	fmt.Println(*fooObj.Name)
-	fooObj.SetName("Warfa")
-	fmt.Println(*fooObj.Name)
-}
+	// Update the random word
+	randomWord = services.GetWord("https://random-word-api.herokuapp.com/word?number=1")
 
-
-fooObj.Fish = "Tuna"
-fooObj.AgeInMonths = fooObj.GetAgeInMonths()
-
-
-
-
-
-	c.JSON(http.StatusOK, fooObj)
-
-}
-
-
-type struct2 struct {
-    Fish string `json:"fish"`
-}
-
-type myType struct{
-    Foo string `json:"foo"`
-    Age int `json:"age"`
-	AgeInMonths string `json:"ageInMonths"`
-	Name *string `json:"name"`
-    struct2
-}
-
-
-func (this *myType) GetAgeInMonths() string {
-	return fmt.Sprintf("The value of age is %v", this.Age * 12)
-}
-
-func (m *myType) SetName(name string) {
-	m.Name = &name
+	// Reschedule the setWord function to be called again after 10 seconds
+	time.AfterFunc(10*time.Hour, func() {
+		SetWord()
+	})
 }

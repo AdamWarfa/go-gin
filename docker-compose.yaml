@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:latest
+    container_name: db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ubuntuskole
+      POSTGRES_DB: postHangman
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postHangman"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - hangman-net
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+
+networks:
+  hangman-net:
+    driver: bridge
+
+volumes:
+  db_data:

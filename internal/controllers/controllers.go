@@ -6,7 +6,9 @@ import (
 	"sync"
 	"time"
 
+	"github.com/AdamWarfa/go-gin/initializers"
 	"github.com/AdamWarfa/go-gin/internal/services"
+	"github.com/AdamWarfa/go-gin/models"
 	"github.com/gin-gonic/gin"
 )
 
@@ -36,4 +38,25 @@ func SetWord() {
 	time.AfterFunc(10*time.Hour, func() {
 		SetWord()
 	})
+}
+
+func SaveUser(c *gin.Context) {
+	var body struct {
+		Id string `json:"id"`
+		Email string `json:"email"`
+		Streak int `json:"streak"`
+		HiScore int `json:"hiScore"`
+	}
+	c.Bind(&body)
+
+	user := models.User{Id: body.Id, Email: body.Email, Streak: body.Streak, HiScore: body.HiScore}
+
+	result:= initializers.DB.Create(&user)
+
+	if result.Error != nil {
+		c.Status(400)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"user": user})
 }

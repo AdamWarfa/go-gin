@@ -60,3 +60,23 @@ func SaveUser(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"user": user})
 }
+
+func UpdateUser(c *gin.Context) {
+
+	id:= c.Param("id")
+
+	var body struct {
+		Id string `json:"id"`
+		Email string `json:"email"`
+		Streak int `json:"streak"`
+		HiScore int `json:"hiScore"`
+	}
+	c.Bind(&body)
+
+	user := models.User{Id: body.Id, Email: body.Email, Streak: body.Streak, HiScore: body.HiScore}
+
+	initializers.DB.Model(&user).Where("id = ?", id).Updates(&user)
+
+
+	c.JSON(http.StatusOK, gin.H{"user": user})
+}

@@ -24,6 +24,7 @@ func main() {
 
     router.GET("/", controllers.GetWord)
 	router.POST("/users", controllers.SaveUser)
+	router.PUT("/users/:id", controllers.UpdateUser)
 
     router.Run(":6969")
 }

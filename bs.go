@@ -1,4 +1,4 @@
-// package bs
+package bs
 
 // import (
 // 	"fmt"
@@ -6,7 +6,6 @@
 
 // 	"github.com/gin-gonic/gin"
 // )
-
 
 // func GetSlash(c *gin.Context) {
 
@@ -34,7 +33,6 @@
 
 // }
 
-
 // type struct2 struct {
 //     Fish string `json:"fish"`
 // }
@@ -46,7 +44,6 @@
 // 	Name *string `json:"name"`
 //     struct2
 // }
-
 
 // func (this *myType) GetAgeInMonths() string {
 // 	return fmt.Sprintf("The value of age is %v", this.Age * 12)

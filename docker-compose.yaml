@@ -4,12 +4,10 @@ services:
   db:
     image: postgres:latest
     container_name: db
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: ubuntuskole
-      POSTGRES_DB: postHangman
+    env_file:
+      - ./.env  # Specify the path to your env file
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d postHangman"]
+      test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER -d $POSTGRES_DB"]
       interval: 10s
       timeout: 5s
       retries: 5

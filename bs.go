@@ -1,4 +1,4 @@
-package bs
+// package bs
 
 // import (
 // 	"fmt"
